@@ -26,7 +26,7 @@ class SaveWindow:
         self.next_button = tk.Button(self.button_frame, text=">>", command=self.next)
         self.next_button.grid(row=0, column=2, padx=2)
 
-        self.toggle_view_button = tk.Button(self.button_frame, text="Show weighted matrix", command=self.toggle_view)
+        self.toggle_view_button = tk.Button(self.button_frame, text="Show weights", command=self.toggle_view)
         self.toggle_view_button.grid(row=0, column=3, padx=2)
 
         # Content component
@@ -73,7 +73,7 @@ class SaveWindow:
         if self.showing_matrix:
             self.matrix_component.hide()
             self.grid_component.show()
-            self.toggle_view_button.config(text="Show weighted matrix")
+            self.toggle_view_button.config(text="Show weights")
         else:
             self.grid_component.hide()
             self.matrix_component.show()

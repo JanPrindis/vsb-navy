@@ -1,3 +1,4 @@
+# PRI0192
 import tkinter as tk
 
 from grid_component import GridComponent
