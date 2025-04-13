@@ -20,12 +20,15 @@ class IFS:
         plt.show()
 
     def simulate(self, num_iterations: int):
-        position = np.array([0.0, 0.0, 0.0])
-        position_history = [position]
+        position = np.array([0.0, 0.0, 0.0])    # Starting position
+        position_history = [position]           # All positions
 
+        # Generate pos for each iteration
         for _ in range(num_iterations):
+            # Choose random row
             r = random.choice(self.model)
 
+            # Input values from random choice
             m = np.array([
                 [r[0], r[1], r[2]],
                 [r[3], r[4], r[5]],
@@ -34,6 +37,7 @@ class IFS:
 
             v = np.array([r[9], r[10], r[11]])
 
+            # Affine transformation
             position = m @ position + v
             position_history.append(position)
 
@@ -57,5 +61,5 @@ if __name__ == '__main__':
     ifs_1 = IFS(first_model)
     ifs_2 = IFS(second_model)
 
-    ifs_1.simulate(num_iterations=1000)
-    ifs_2.simulate(num_iterations=1000)
+    ifs_1.simulate(num_iterations=10000)
+    ifs_2.simulate(num_iterations=10000)

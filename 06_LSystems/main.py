@@ -40,6 +40,7 @@ class LSystems:
             btn = tk.Button(self.control_frame, text=f"Example {i}", command=partial(self.draw_demo, i))
             btn.pack(pady=2)
 
+    # Helper method for creating inputs
     @staticmethod
     def add_labeled_entry(parent, label_text, initial_value=None):
         label = tk.Label(parent, text=label_text)
@@ -52,10 +53,7 @@ class LSystems:
         entry.pack()
         return entry
 
-    @staticmethod
-    def apply_rule(axiom: str, rule: str):
-        return axiom.replace('F', rule)
-
+    # Helper methods for parsing number inputs
     @staticmethod
     def set_default_int(var):
         if var == '':
@@ -70,6 +68,11 @@ class LSystems:
         else:
             return float(var)
 
+    # Helper method that replaces the letter F with whatever is stored in the rule parameter
+    @staticmethod
+    def apply_rule(axiom: str, rule: str):
+        return axiom.replace('F', rule)
+
     def draw_internal(self, axiom, rule,  max_nesting, pos_x, pos_y, angle, angle_step, length):
         # Clear the canvas
         self.clear()
@@ -81,6 +84,7 @@ class LSystems:
 
         checkpoint_stack = []
 
+        # Iterate through the string and draw the result
         for c in axiom:
             if c == 'F':
                 angle_radians = math.radians(angle)
@@ -107,6 +111,7 @@ class LSystems:
                     print("Stack is empty, something broke")
 
     def draw(self):
+        # Set default values if variables not set (0)
         pos_x = self.set_default_int(self.startingPosX_entry.get())
         pos_y = self.set_default_int(self.startingPosY_entry.get())
         angle = self.set_default_float(self.startingAngle_entry.get())
@@ -127,7 +132,7 @@ class LSystems:
         self.canvas.delete("all")
 
     def draw_demo(self, idx):
-
+        # Examples from presentation
         if idx == 1:
             self.draw_internal(
                 axiom=' F+F+F+F',
