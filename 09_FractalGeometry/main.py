@@ -1,13 +1,9 @@
 # PRI0192
+
 import copy
-import math
 import random
 import tkinter as tk
-from functools import partial
 from tkinter import colorchooser
-
-from matplotlib.pyplot import margins
-
 
 class FractalGeometry:
     def __init__(self, root):
@@ -73,6 +69,7 @@ class FractalGeometry:
         else:
             return float(var)
 
+    # Helper method for updating color picker buttons color
     def set_button_color(self, color):
         self.color_button.config(
             bg=color,
@@ -84,6 +81,7 @@ class FractalGeometry:
             highlightthickness=1,
         )
 
+    # Color picker
     def pick_color(self):
         color = colorchooser.askcolor(title="Terrain color")[1]
         if color:
@@ -92,6 +90,7 @@ class FractalGeometry:
             self.set_button_color(color)
 
     @staticmethod
+    # Custom iterator, that returns tuples
     def moving_window(n, iterable):
         start, stop = 0, n
         while stop <= len(iterable):
@@ -110,20 +109,26 @@ class FractalGeometry:
 
         splits = [(start_x, start_y), (end_x, end_y)]
 
+        # Iterations
         for i in range(n_iter):
             new_splits = [splits[0]]
+
+            # For each tuple
             for x in self.moving_window(2, splits):
                 begin = x[0]
                 end = x[1]
 
+                # Split in the middle
                 new_split_x = (begin[0] + end[0]) / 2
                 new_split_y = (begin[1] + end[1]) / 2
 
+                # 50% change of offsetting above or below
                 if random.random() < 0.5:
                     new_split_y += offset
                 else:
                     new_split_y -= offset
 
+                # Add new point with vertical offset
                 new_splits.append((new_split_x, new_split_y))
                 new_splits.append(end)
 
@@ -134,6 +139,7 @@ class FractalGeometry:
         splits.append((splits[-1][0], height_of_polygon))
         splits.append((splits[0][0], height_of_polygon))
 
+        # Draw as polygon
         flattened = [a for x in splits for a in x]
         self.canvas.create_polygon(*flattened, fill=self.picked_color, outline="")
 
