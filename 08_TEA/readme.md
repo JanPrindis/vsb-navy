@@ -45,7 +45,7 @@ Implementace byla rozdělena do dvou skriptů. Použití aplikace a její fungov
   - _**CPU:**_ 1:59:30
   - _**GPU:**_ 9:23
 
-_**CPU:**_ Intel i7 14700F (8P + 12E cores, 28 threads)\
+_**CPU:**_ Intel Core i7 14700F (8P + 12E cores, 28 threads)\
 _**GPU:**_ NVIDIA GeForce RTX 4070 Ti SUPER (16G)
 
 ---
