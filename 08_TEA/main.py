@@ -1,63 +1,86 @@
-import numpy as np
-import matplotlib.pyplot as plt
+# PRI0192
 from mandelbrot import *
-import matplotlib.colors as mcolors
 
-xmin, xmax = -2.0, 1.0
-ymin, ymax = -1.5, 1.5
-width, height = 800, 600
+print("========================================")
+print("Click inside the plot to zoom in")
+print("After closing the plot window a command to generate an animation will be shown")
+print("========================================")
+
+# Initial params
+width, height = 600, 600
 max_iter = 100
-zoom_factor = 0.5
 
+if cuda.is_available():
+    width, height = 1000, 1000
+    mex_iter = 500
+
+zoom_scale = 0.5
+total_zoom_factor = 1.0
+colormap_name = None    # Or a matplotlib color colormap
+
+# Initial bounds
+aspect_ratio = width / height
+x_min, x_max, y_min, y_max = compute_initial_bounds(aspect_ratio)
 
 def redraw(center_x, center_y, zoom_scale):
-    global xmin, xmax, ymin, ymax
-    width_range = (xmax - xmin) * zoom_scale
-    height_range = (ymax - ymin) * zoom_scale
-    xmin = center_x - width_range / 2
-    xmax = center_x + width_range / 2
-    ymin = center_y - height_range / 2
-    ymax = center_y + height_range / 2
+    global x_min, x_max, y_min, y_max, total_zoom_factor
 
-    result = mandelbrot_set(xmin, xmax, ymin, ymax, width, height, max_iter)
+    x_min, x_max, y_min, y_max = zoom_to_center(
+        np.float64(x_min), np.float64(x_max),
+        np.float64(y_min), np.float64(y_max),
+        zoom_scale, np.float64(center_x), np.float64(center_y)
+    )
+    total_zoom_factor *= zoom_scale
 
-    normed_result = result / max_iter
+    if cuda.is_available():
+        data = mandelbrot_set_gpu(
+            np.float64(x_min), np.float64(x_max),
+            np.float64(y_min), np.float64(y_max),
+            width, height, max_iter
+        )
+    else:
+        data = mandelbrot_set(
+            np.float64(x_min), np.float64(x_max),
+            np.float64(y_min), np.float64(y_max),
+            width, height, max_iter
+        )
 
-    hue = normed_result
-    saturation = np.where(result == max_iter, 0, 1)
-    value = np.where(result == max_iter, 0, 1)
-
-    hsv_image = np.stack((hue, saturation, value), axis=-1)
-    rgb_image = mcolors.hsv_to_rgb(hsv_image)
+    # Convert to color
+    rgb_image = compute_colored_image(data.astype(np.float32), max_iter, colormap_name)
 
     ax.clear()
-    ax.imshow(rgb_image, extent=[xmin, xmax, ymin, ymax], origin='lower')
+    ax.imshow(rgb_image, extent=[x_min, x_max, y_min, y_max], origin='lower', interpolation='nearest')
+    ax.set_title(f"Zoom factor: {total_zoom_factor:.2e}", fontsize=10)
     fig.canvas.draw()
 
-
+# On click event listener, that will zoom the plot
 def onclick(event):
     if event.xdata is not None and event.ydata is not None:
         print(f"[ZOOM]: {event.xdata} {event.ydata}")
-        redraw(event.xdata, event.ydata, zoom_factor)
+        redraw(event.xdata, event.ydata, zoom_scale)
 
-
+# Draw plot
 fig, ax = plt.subplots()
-result = mandelbrot_set(xmin, xmax, ymin, ymax, width, height, max_iter)
 
-normed_result = result / max_iter
+if cuda.is_available():
+    data = mandelbrot_set_gpu(x_min, x_max, y_min, y_max, width, height, max_iter)
+else:
+    data = mandelbrot_set(x_min, x_max, y_min, y_max, width, height, max_iter)
 
-hue = normed_result
-saturation = np.where(result == max_iter, 0, 1)
-value = np.where(result == max_iter, 0, 1)
+# Convert the raw data to color
+rgb_image = compute_colored_image(data, max_iter, colormap_name)
 
-hsv_image = np.stack((hue, saturation, value), axis=-1)
-rgb_image = mcolors.hsv_to_rgb(hsv_image)
-
-ax.imshow(rgb_image, extent=[xmin, xmax, ymin, ymax], origin='lower')
+# Draw
+ax.imshow(rgb_image, extent=[x_min, x_max, y_min, y_max], origin='lower', interpolation='nearest')
 fig.canvas.mpl_connect('button_press_event', onclick)
-
 plt.show()
 
-center_x = (xmin + xmax) / 2.0
-center_y = (ymin + ymax) / 2.0
-print(f"Center X: {center_x}, Center Y: {center_y}")
+# On exist calculate the centers
+center_x = (x_min + x_max) / 2.0
+center_y = (y_min + y_max) / 2.0
+
+print("========================================")
+print("To render a video, run this script:")
+print(f"python create_video.py --center_x {center_x} --center_y {center_y} --zoom {total_zoom_factor:.2e}")
+print("Or use create_video.py --help for more information")
+print("========================================")
