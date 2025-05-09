@@ -1,4 +1,4 @@
-# TASK 11? - Double Pendulum
+# TASK 11 - Double Pendulum
 
 Cílem úkolu bylo vytvořit simulaci dvojitého kyvadla. 
 
