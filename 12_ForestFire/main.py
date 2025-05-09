@@ -1,3 +1,4 @@
+# PRI0192
 import random
 from enum import Enum
 
@@ -104,14 +105,14 @@ class ForestFire:
         return result
 
     # Animation stuff
-    def __update_animation_frame(self, frame):
-        self.map_matrix = self.__tick()
-        self.numeric_matrix = np.vectorize(lambda cell: cell.value)(self.map_matrix)
-        self.img.set_data(self.numeric_matrix)
-        return [self.img]
-
     def run(self, interval=100):
-        animation = FuncAnimation(self.fig, self.__update_animation_frame, interval=interval, cache_frame_data=False)
+        def update_animation_frame(frame):
+            self.map_matrix = self.__tick()
+            self.numeric_matrix = np.vectorize(lambda cell: cell.value)(self.map_matrix)
+            self.img.set_data(self.numeric_matrix)
+            return [self.img]
+
+        animation = FuncAnimation(self.fig, update_animation_frame, interval=interval, cache_frame_data=False)
         plt.show()
 
 
