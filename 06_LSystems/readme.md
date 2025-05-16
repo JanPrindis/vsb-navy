@@ -3,6 +3,7 @@
 Cílem úkolu bylo vytvořit aplikaci vizualizující Lindenmayerův systém.
 Uživatel nastaví počáteční pozici, počáteční úhel, počáteční axiom, pravidlo, maximální hloubku zanoření, úhel (podle kterého se bude otáčet při použití `+` a `-`) a délku čáry (při použití `F`).
 Uživatel může také využít 4 tlačítka, která aplikují do těchto proměnných vstup, který byl zadán jako ukázka v prezentaci.
+
 ---
 
 ### 1. Aplikace pravidla
