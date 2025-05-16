@@ -1,9 +1,8 @@
-import numpy
 import numpy as np
 
 class HopfieldNetwork:
     @staticmethod
-    def calculate_weight_matrix(input_matrix: numpy.ndarray) -> numpy.ndarray:
+    def calculate_weight_matrix(input_matrix: np.ndarray) -> np.ndarray:
         input_vector = input_matrix.reshape(-1, 1)
 
         # Replace 0 with -1
@@ -15,7 +14,7 @@ class HopfieldNetwork:
         return weight_matrix
 
     @staticmethod
-    def asynchronous_pattern_recovery(input_pattern: numpy.ndarray, weights: list[numpy.ndarray]) -> numpy.ndarray:
+    def asynchronous_pattern_recovery(input_pattern: np.ndarray, weights: list[np.ndarray]) -> np.ndarray:
         # Weight matrices are passed separately, they are added together here
         weight_matrix = sum(weights)
 
@@ -33,7 +32,7 @@ class HopfieldNetwork:
         return fixed_pattern.reshape(input_pattern.shape)
 
     @staticmethod
-    def synchronous_pattern_recovery(input_pattern: numpy.ndarray, weights: list[numpy.ndarray]) -> numpy.ndarray:
+    def synchronous_pattern_recovery(input_pattern: np.ndarray, weights: list[np.ndarray]) -> np.ndarray:
         # Weight matrices are passed separately, they are added together here
         weight_matrix = sum(weights)
 
@@ -50,6 +49,6 @@ class HopfieldNetwork:
         return fixed_pattern.reshape(input_pattern.shape)
 
 class Pattern:
-    def __init__(self, pattern: numpy.ndarray):
+    def __init__(self, pattern: np.ndarray):
         self.pattern = pattern
         self.weight_matrix = HopfieldNetwork.calculate_weight_matrix(self.pattern)

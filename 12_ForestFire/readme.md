@@ -1,4 +1,4 @@
-# TASK 5 - Forest Fire
+# TASK 12 - Forest Fire
 
 Cílem úkolu bylo vytvořit buněčný automat, který bude simulovat požár lesu. 
 

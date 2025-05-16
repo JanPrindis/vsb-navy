@@ -1,0 +1,10 @@
+matplotlib
+numpy
+pillow
+opencv-python
+tqdm
+numba
+pygame
+gymnasium
+keras
+scipy
